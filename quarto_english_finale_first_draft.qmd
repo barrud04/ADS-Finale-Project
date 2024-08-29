@@ -1,0 +1,344 @@
+---
+title: "Influence of gender on the purchase patterns of bicycles in different countries"
+author: "Valeria Bezlandy 321060626 - Bar Rudman 206849028 "
+format: 
+    revealjs:
+        css: "quarto_stl.css"
+        transition: zoom
+        transition-speed: slow
+        scrollable: true
+        slide-number: true
+editor: visual
+---
+
+## Introduction {.smaller style=".Headline"}
+
+In recent years, the bicycle has become a popular means of transportation used by many people around the world, especially in the big cities and countries with a developed cycling culture. Bicycles are used not only as a means of transportation, but also as a means of exercise, leisure and tourism. With the increase in awareness of health and preserving the quality of the environment, purchasing a bicycle has become one of the preferred choices for many. However, there are various factors that influence the purchase patterns of bicycles, and one of the main factors is gender.
+
+The main research question of this work is: "Does gender affect the purchase patterns of bicycles in different countries?" This question is particularly interesting in light of the cultural, economic and social changes that have taken place in recent years around the world. Gender may play a significant role in consumer decisions, and the choices of men and women can have different effects on the market. In this work, we will examine how gender differences are reflected in the purchase of bicycles in the various countries, and we will try to understand what other factors may influence these decisions.
+
+## introduction {.smaller}
+
+We will investigate the different patterns of bicycle purchase between men and women, while comparing the different countries. The purpose of the work is to identify and understand the different trends in the purchase of bicycles by gender, and to provide insights into how public policy, local culture and the weather affect purchasing decisions. In addition, we will examine whether there are significant differences between the different countries and how the purchase patterns change according to the geographical location and the cultural context.
+
+In our research work we used data from Kaggle: The data is spread over 6 years 2011-2016 and shows bicycle purchase patterns in 6 countries: France, Germany, Great Britain, Australia, the United States and Canada. In addition, you can also find details about the consumers such as gender, age and when they purchased the bike (month, day).
+
+## Literature review 1 {.smaller}
+
+The article "Beyond the bicycle: Seeing the context of the gender gap in cycling" written by Caroline Shaw a, Marie Russell a, Michael Keall a, Sara MacBride-Stewart b, Kirsty Wild c, Dory Reeves d, Rebecca Bentley e, Alistair Woodward looks at the gender gap in cycling in New Zealand, and aims to understand the factors that influence the differences between men and women in this area.Although the country ranks high in indicators of gender equality, the article suggests that women are less likely to cycle than men. The researchers used data from the National Household Travel Survey (NZHTS) to analyze the cycling behaviors of men and women. They found that women with children at home were less likely to cycle. In addition, a negative (inverse) relationship was found between the number of vehicles at home and cycling - the more vehicles there are, the less chance of cycling. The article highlights the influence of social and cultural factors on cycling, such as gender roles, access to resources and free time. The researchers suggest that there is a need for a transportation policy that takes into account the needs of women, in order to encourage cycling and reduce the gender gaps that have been created. In conclusion, the article suggests that there is a need to develop a transportation policy that takes into account the needs and preferences of women, in order to reduce the gender gap and improve the use of bicycles as a means of transportation.
+
+## Literature review 2 {.smaller}
+
+The article "Gender differences in cycling patterns and attitudes towards cycling in a sample of European regular cyclists" written by Gabriele Pratia, Federico Frabonib, Marco De Angelisb, Luca Pietrantonib, Daniel Johnsonc, Jeremy Shiresc deals with gender differences in attitudes and use of bicycles among cyclists in European countries variance.The main goal of the study was to understand how gender affects the use of bicycles, focusing on different cultural and social contexts. Based on the article, it can be seen that gender does affect cycling patterns, but the effect varies according to different contexts. Women tend to use bicycles more for activities that are not considered work trips, such as shopping and childcare, while men tend to ride more for leisure and sports purposes. This indicates that gender affects the purposes of bicycle use, where women may be more focused on daily activities and not necessarily on competitive or sporty riding.Women reported a higher sense of discomfort than men when it comes to roads without bike lanes, which indicates the need to improve the infrastructure to encourage cycling among women. Men tend to suffer more serious injuries while riding, which indicates differences in risk behavior and riding skills between the sexes. This may indicate that men tend to take higher risks when riding, which may affect their riding patterns. <br> In conclusion, according to the article, men tend to use bicycles more than women, especially for commuting and leisure activities while women tend to use bicycles more for everyday activities such as shopping.
+
+## Hypotheses {.smaller}
+
+**Secondary research questions:**
+
+-   How does the influence of gender on the purchase patterns of bicycles vary between different countries?
+
+-   Is there a difference in the preference of the types of bicycles (mountain bikes, road bikes, touring bikes) between men and women?
+
+**Assumptions:** We hypothesize that there is a significant difference in the purchase patterns of the types of bicycles between men and women in different countries, women tend to purchase more touring/road bikes and men tend to purchase more mountain bikes in different countries (based on the literature).
+
+We expect to see that the purchase patterns of bicycles according to gender change significantly over the years in different countries and this is due to changes in the economic situation that make it possible to purchase a car or vice versa due to the cost of living priority will be given to the purchase of bicycles. Additionally as we progress over the years we can see that the awareness of managing a healthy lifestyle increases which may promote Buying a bike.
+
+## Methodology/ research methods {.smaller}
+
+<p>The data was taken from Kaggle which we downloaded and saved in a working folder.We uploaded the data to Studio R and named it bicycle_sales. We have downloaded all the packages that we will work with during the work.</p>
+
+```{r, eval=FALSE, echo=TRUE}
+bicycle_sales= read.csv("bike_sales.csv")
+
+bicycle_sales
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+```
+
+## Methodology/ research methods {.smaller}
+
+We started to process the data, in the data appeared not only bicycle purchases but also details of clothing and protection such as a helmet that were purchased in the same stores that sold the bicycles, because they were not relevant to our work we used the filter command which filtered the rows we wanted only rows where the purchase was a bicycle were selected.
+
+Later we chose to use the select command in order to choose the columns relevant to our research (there were columns such as the profit of the store that did not contribute to us) in order to reduce and make the table more orderly and finally for the convenience of being able to follow the years we chose to separate the date into day-month-year and this with separate command.
+
+```{r, eval=FALSE, echo = T}
+Bikes= bicycle_sales |>
+filter(Product_Category== "Bikes")
+
+Bikes= Bikes |>
+select(Date, Customer_Age, Customer_Gender, Order_Quantity, Country, State, Sub_Category
+, Product_Category)
+
+Bikes= Bikes |>
+separate(Date, into = c("Day", "Month", "Year"), sep = "/")
+
+```
+
+##  {.smaller style="color: blue"}
+
+After separating the date we used select again to select the relevant columns, we selected only the year and gave up the day and the month.
+
+```{r, eval=FALSE, echo=TRUE}
+Bikes= Bikes |>
+  select(Year, Customer_Age, Customer_Gender, Order_Quantity, Country, Sub_Category)
+
+```
+
+In the first attempt, we created new tables from our data that would be suitable for us to continue, we used group by, summarize and made the table wider by the pivot wider command for visual comfort.
+
+```{r, eval=FALSE, echo=TRUE}
+# Table of years and countries according to purchase
+By_country = Bikes |> group_by(Country, Year) |>
+  summarise(Sum_Quantity = sum(Order_Quantity)) |> 
+  pivot_wider(names_from = Year, values_from = Sum_Quantity)
+# Table of years and gender by purchase
+by_contry_gender = Bikes |> group_by(Country, Year, Customer_Gender) |>
+  summarise(Sum_Quantity = sum(Order_Quantity)) |> 
+  pivot_wider(names_from = c(Year, Customer_Gender), values_from = Sum_Quantity)
+#We check how many of each type of bike were bought in each country by gender
+by_gender_subcategory = Bikes |> group_by(Country,Customer_Gender, Sub_Category) |>
+  summarise(Sum_Quantity = sum(Order_Quantity)) |>
+  pivot_wider(names_from = c(Customer_Gender, Sub_Category), values_from = Sum_Quantity, names_sep = "_")
+
+```
+
+##  {.smaller}
+
+![**Table 1:** Purchaes per country - through the years](table_1.png){fig-align="center" width="550"}
+
+![**Table 2:** purchase per gender and type of bike](table_2.png){fig-align="center" width="550"}
+
+![Table 3: Purchases per gender by country and year](table_3.png){fig-align="center" width="550"}
+
+## 
+
+After trial and error, we realized that in order to be able to work with the tables and create visual graphs from them we would have to make them longer by rearranging them with the Pivot longer action: We changed the names of the tables by adding the number 2 so that we can know that any table that has a 2 is the final table with which we will work and create graphs.
+
+```{r, eval=FALSE, echo= TRUE}
+By_country2= By_country |>
+  pivot_longer(cols = -Country, names_to = "Year", values_to = "Purchases") 
+
+#יצירת הגרף
+
+ggplot(By_country2, aes(x = Year, y = Purchases, color = Country, group = Country)) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  labs(title = "Bike Purchases by Country (2011-2016)",
+       x = "Year",
+       y = "Number of Purchases") +
+  theme_minimal()
+```
+
+## Table_4
+
+![](table_.png){fig-align="center"}
+
+## Bike Purchases by Country 2011-2016
+
+![](fig_1.png){fig-align="center"}
+
+## Rearranging the table by country and gender
+
+```{r eval=F, echo=TRUE}
+by_country_gender2 = by_contry_gender |>
+  pivot_longer(cols = -Country, names_to = "Year_Gender", values_to = "Purchases") |>
+  separate(Year_Gender, into = c("Year", "Gender"), sep = "_") 
+
+#plot
+
+ggplot(by_country_gender2, aes(x = Year, y = Purchases, color = Gender, group = interaction(Country, Gender))) +
+  geom_line(size = 1) +
+  geom_point(size = 2) +
+  facet_wrap(~ Country) +
+  labs(title = "Bike Purchases by Country, Gender, and Year (2011-2016)",
+       x = "Year",
+       y = "Number of Purchases") +
+  theme_minimal()
+```
+
+## Table 5
+
+![](table_5.png){fig-align="center"}
+
+## Plot 2
+
+![We cannot currently see a distinct difference between the sexes without calculations](fig_2_.png){fig-align="center"}
+
+## Rearranging the table by gender, country and bike type {.smaller}
+
+```{r, eval=FALSE, echo=T}
+by_gender_subcategory2= by_gender_subcategory |>
+  pivot_longer(cols = -Country, names_to = "BikeType_Gender", values_to = "Purchases") |>
+ 
+   separate(BikeType_Gender, into = c("Gender", "BikeType"), sep = "_", extra = "merge")
+
+##Plot
+
+ggplot(by_gender_subcategory2, aes(x = BikeType, y = Purchases, fill = Gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ Country) +
+  labs(title = "Bike Purchases by Country, Gender, and Bike Type",
+       x = "Bike Type",
+       y = "Number of Purchases") +
+  theme_minimal()
+
+```
+
+## Table_6
+
+![](table_6.png){fig-align="center"}
+
+## Plot 3
+
+![](fig_3.png){fig-align="center"}
+
+## 
+
+After checking, we saw that all the variables were of integer type in order to be able to continue doing calculations and statistical tests, we had to change some parameters to factor because they are categorical male-female, years, type of bicycle, etc..
+
+```{r, echo=TRUE, eval=FALSE}
+#In order to be able to do statistical calculations conveniently, we will need to turn certain variables into a factor: #
+By_country2$Country= as.factor(By_country2$Country)
+by_country_gender2$Country= as.factor(by_country_gender2$Country)
+by_country_gender2$Gender= as.factor(by_country_gender2$Gender)
+by_gender_subcategory2$Country= as.factor(by_gender_subcategory2$Country)
+by_gender_subcategory2$BikeType= as.factor(by_gender_subcategory2$BikeType)
+by_gender_subcategory2$Gender= as.factor(by_gender_subcategory2$Gender)
+
+```
+
+## Independent T-test
+
+By the T test we will check whether there is a significant statistical difference between the average purchases between the two different groups, men and women.
+
+First of all we did a preliminary test for the **T test** and it is an **F test** designed to check if there is a significant difference between the differences of the two groups.
+
+```{r, eval=FALSE, echo=TRUE}
+f_test_result = var.test(Purchases ~ Gender, data = by_country_gender2)
+print(f_test_result)
+```
+
+## Independent T-test
+
+![**It can be seen that in the F test, the p value is much greater than 0.05, it came out to be 0.9393, which means that the differences of the two groups are similar and there is no significant difference between them, so we can proceed to the T test.**](fig_.png){fig-align="center"}
+
+## Independent T-test {.smaller}
+
+```{r, eval=FALSE, echo= T}
+t_test_result= t.test(Purchases ~ Gender, data =  by_country_gender2)
+print(t_test_result)
+```
+
+![](fig_6.png){fig-align="center"}
+
+**The test result:**
+
+it can be seen that the P VALUE=0.909 is greater than 0.05, which indicates that there is no significant difference in the average bicycle purchases between men and women in our sample.
+
+## Two-way ANOVA test {.smaller}
+
+We chose to check whether there is an interaction between gender and the type of bicycle that affects the number of bicycle purchases. That is, does the effect of the type of bicycle vary according to gender.
+
+```{r, echo=TRUE, eval=FALSE}
+
+anova_result = aov(Purchases ~ Gender * BikeType, data = by_gender_subcategory2)
+summary(anova_result)
+```
+
+![](fig_7_2.png){fig-align="center"}
+
+**The test result:** There is no significant difference in the number of purchases between men and women.
+
+[**There is a clear difference in the number of purchases between the different types of bikes.**]{.underline}
+
+There is no significant interaction between gender and the type of bicycle, that is, the differences in the number of purchases between the types of bicycle are not significantly different between men and women.
+
+## Chi square test {.smaller}
+
+The test is designed to test whether there is a dependency between two categorical variables, in our case we chose gender (male/female) and the type of bicycle (off-road/trip/road).First of all, we created a frequency table from the original data, which we then called Bikes so that all the observations could be entered.We called the table Table_gender_biketype and then from it we created a fixed data frame that we called DF_G_T and this is the frequency table that was created for us on which we did the chi square test.
+
+```{r, eval=FALSE,echo=TRUE}
+table_gender_biketype = table(Bikes$Customer_Gender, Bikes$Sub_Category)
+
+print(table_gender_biketype)
+
+DF_G_T= as.data.frame(table_gender_biketype)
+
+chi_test= chisq.test(table_gender_biketype)
+print(chi_test)
+```
+
+## Chi square test {.smaller}
+
+![Table of Frequency](fig_8.png)
+
+[**CHI squared test results:**]{.underline}
+
+![The P Value=0.0242, smaller than 0.05, so the test results show that there is a statistically significant relationship between gender and the type of bicycle. That is, the type of bicycle chosen depends on the gender of the buyer.](fig_9.png){fig-align="center"}
+
+## Visual display of frequencies
+
+```{r, eval=FALSE , echo=TRUE}
+ggplot(DF_G_T, aes(x = Var2, y = Freq, fill = Var1)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Incidence Of Bike Types By Gender",
+       x = "Bike Type",
+       y = "Incidence Of Bike Types") +
+  theme_minimal()
+
+```
+
+![](plot_1.png){fig-align="center"}
+
+## Results {.smaller}
+
+With the help of the F and T test, we checked whether there is a significant difference in bicycle purchases between men and women (T test) and whether there is a significant difference between the groups (F test). Both tests did not show a significant difference, which led us to the conclusion that there is no difference in purchases between the genders according to the data we worked on.
+
+Using the ANOVA test, we tested the relationship between gender and type of bicycle, but the results indicated that gender does not significantly affect the type of bicycle purchased, while the type of bicycle itself has a significant effect on the number of purchases.
+
+Using a chi-square test we tested whether there is a relationship between gender and the type of bicycle, the results showed that there is a significant relationship, which suggests that gender influences the type of bicycle chosen for purchase.
+
+## Conclusions from the study with a link to the literature: {.smaller}
+
+The article "Beyond the bicycle: Seeing the context of the gender gap in cycling" talks about social and cultural influences such as gender roles and access to resources that affect the use of bicycles, the results of the tests we performed reflect some of these effects. The result of the T-test showed that there is no significant difference in the number of purchases between men and women, but there are significant differences in the types of bicycles purchased by gender (resulted in the anova test and squared), which indicates the influence of social factors in the decision-making process, and the different preferences regarding the types of bicycles they purchase.
+
+## Conclusions from the study with a link to the literature: {.smaller}
+
+The article "Gender differences in cycling patterns and attitudes towards cycling in a sample of European regular cyclists" indicates that women use bicycles more for daily activities such as shopping and childcare, while men use them more for leisure and sports. According to the results of our research, we saw a significant difference in the types of bicycles purchased between the genders. The results of the ANOVA and chi-square tests we conducted support this claim. Although gender does not significantly affect the total amount of purchases, it does affect the type of bike purchased, which may reflect the different purposes that users attribute to riding.In addition, the article talks about the fact that women report a higher feeling of discomfort on roads without bike lanes. The results of our study reinforce this conclusion in that the differences between the types of bikes purchased can be related to the riders' sense of security and comfort, which can influence women's choice of bikes that are more suitable for safe and comfortable riding.
+
+In conclusion, the reviewed articles support the idea that there are gender differences in perceptions and patterns of bicycle use, especially in the context of social and cultural roles. In your study, gender does not seem to have a significant effect on the overall number of purchases, but there is a significant effect on the type of bike purchased.
+
+## Conclusions: {.smaller}
+
+### Let's return to our main research question: [**Does gender affect the purchase patterns of bicycles in different countries?**]{.underline} {.smaller}
+
+The general conclusion is that gender does affect the type of bike purchased, but not necessarily the number of purchases.We were not able to confirm our hypothesis, we thought that gender would play a role and affect the purchase patterns of bicycles and we even expected to see that more men would purchase bicycles than women. There is room to deepen the research in order to better understand the purchase patterns.The reason for this could be that the sample was not large and diverse enough, our study focused on 6 individual countries and perhaps in order to achieve greater accuracy, more countries and a wider range of years should be included.
+
+### Policy and Implementation: {.smaller}
+
+Consider campaigns adapted to different genders to encourage the purchase of certain types of bicycles.
+
+Focus on improving bicycle infrastructure that will encourage the use of cycling among women, especially in light of the findings from the literature on the feeling of discomfort among women.
+
+## Bonus {.smaller}
+
+![](fig_11.png){fig-align="center" width="34cm"}
+
+##  {.smaller}
+
+We were surprised to see the spread of data between the years 2011-2016 in the different countries.The country where the largest number of bicycle purchases was the USA - the largest and most populated country. And then we expected to see Canada, but it is at the bottom and the second place goes to Australia.
+
+Until 2015, an upward trend in the purchase of bicycles can be seen in most countries, apparently following policy changes and encouraging cycling Mainly due to the environmental and health aspect, but from 2015 to 2016 there is a decrease in most countries except France, after examination we speculate that the reason for this was the electric bicycle market that entered strongly in these years and it may be that the off-road/touring/road bikes were replaced by electric bikes.
+
+In addition, there could be other economic reasons, Social issues that are worth checking in a follow-up study that explains the decrease in the number of purchases and whether there are other countries where the increase has remained and what is the reason for this.
+
+## Bibliography {.smaller}
+
+"Beyond the bicycle: Seeing the context of the gender gap in cycling" Caroline Shaw a, Marie Russell a, Michael Keall a, Sara MacBride-Stewart b, Kirsty Wild c Dory Reeves d, Rebecca Bentley e, Alistair Woodward Journal of transport & health (2020) <https://www.sciencedirect.com/science/article/abs/pii/S221414052030075X>
+
+"Gender differences in cycling patterns and attitudes towards cycling in a sample of European regular cyclists" Gabriele Pratia, Federico Frabonib, Marco De Angelisb, Luca Pietrantonib, Daniel Johnsonc, Jeremy Shiresc Journal of Transport Geography Volume 78, June 2019, Pages 1-7 <https://www.sciencedirect.com/science/article/abs/pii/S0966692318305556>
+
+Data from Kaggle: <https://www.kaggle.com/datasets/sadiqshah/bike-sales-in-europe/data>

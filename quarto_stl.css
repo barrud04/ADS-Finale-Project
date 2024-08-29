@@ -1,0 +1,48 @@
+
+/* Style all slides */
+.reveal .slides {
+  border: 2px solid black;  /* Set a thicker black border around slides */
+  padding: 0px;             /* Add padding inside the border to prevent content from touching the border */
+  margin: 0;                 /* Remove margin to avoid extra space outside the border */
+  background-color: #f0f0f0;
+  margin: 3cm; /* Set a background color for visibility */
+  box-sizing: border-box;
+  width:150vw;               /* Set the width of the slide */
+  height: 90vh;            /* Ensure padding and border are included in the total width and height */
+}
+
+/* Background color for the entire presentation */
+/*.reveal {
+  background-color: #6868e4; /* Light beige-brown-orange */
+/*}
+
+/* Style all <h2> headings to be red and bold */
+.reveal .slides h2 {
+    color: rgba(255, 25, 0, 0.808);       /* Set text color to red */
+    font-weight: bold; /* Set text to bold */
+  }
+
+/* Style all images */
+img {
+  width: 200px;         /* Set a fixed width for all images */
+  height: 150px;        /* Set a fixed height for all images */
+  margin: 100px;         /* Add space around the images (outside border) */
+  padding: 5px;         /* Add space inside the images (between border and content) */
+  object-fit: cover;    /* Ensure the image covers the fixed size without distortion */
+   /* Optional: Add a border around the images */
+}
+/* Set a background image for all slides */
+.reveal .slides {
+  background-image: url("Picture of bikes.jpg"); /* Replace with the path to your image */
+  background-size: cover;      /* Cover the entire slide */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+}
+/* Set a background image for the entire webpage */
+body {
+  background-image: url("Picture of bikes.jpg"); /* Replace with the path to your image */
+  background-size: cover;      /* Cover the entire webpage */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-attachment: fixed; /* Make the background image fixed when scrolling */
+}
